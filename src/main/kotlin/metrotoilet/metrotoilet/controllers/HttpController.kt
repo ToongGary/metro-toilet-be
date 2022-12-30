@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RestController
 class HttpController(private val service: Service) {
     @GetMapping("/station")
     fun getStations() {
-        return service.findAllStation()
+//        return service.findAllStation()
     }
 
     @GetMapping("/station/{station_code}")
     fun getStationInfo(@PathVariable("station_code") stationCode: String): String {
-        return service.findOneStation()
+//        return service.findOneStation()
+        return "TEST"
     }
 }

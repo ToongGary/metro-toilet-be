@@ -12,24 +12,26 @@ class Service(
     private val metroToiletRepository: MetroToiletRepository
 ) {
     fun findAllStation(line_code: String) {
-        return metroRepository.findAll()
+//        return metroRepository.findAll()
     }
 
     fun findOneStationToilet(station_code: String) {
-        return metroToiletRepository.findOne()
+//        return metroToiletRepository.findOne()
     }
 
     fun syncStations(line_code: String?) {
         val stations = kricHttpAdapter.requestStation()
-        metroRepository.updateOne(stations)
+//        metroRepository.updateOne(stations)
     }
 
     fun syncStationsToilet(line_code: String?, station_code: String?) {
         val stations = kricHttpAdapter.requestStation()
 
-        for (station in stations) {
-            val toilet = kricHttpAdapter.requestStationToilet(station)
-            metroRepository.updateOne(toilet)
+        if (stations != null) {
+            for (station in stations.body) {
+//                val toilet = kricHttpAdapter.requestStationToilet(station)
+//            metroRepository.updateOne(toilet)
+            }
         }
     }
 }
