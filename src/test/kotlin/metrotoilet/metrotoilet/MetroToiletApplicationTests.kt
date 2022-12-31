@@ -6,8 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class MetroToiletApplicationTests {
 
-	@Test
-	fun contextLoads() {
-	}
+// 임시
+//	@Test
+//	fun contextLoads() {
+//	}
 
 }

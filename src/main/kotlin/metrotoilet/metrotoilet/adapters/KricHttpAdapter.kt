@@ -49,8 +49,8 @@ class KricHttpAdapter(
         queryString.append("serviceKey=$key&")
         queryString.append("format=json&")
 
-        for ((key, value) in map.entries) {
-            queryString.append("$key=$value&")
+        for ((k, v) in map.entries) {
+            queryString.append("$k=$v&")
         }
 
         return "$endpoint?$queryString"
