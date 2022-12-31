@@ -6,13 +6,13 @@ import org.springframework.scheduling.annotation.Scheduled
 
 @Controller
 class CronController(private val service: Service) {
-    @Scheduled(cron = "0 0 0/15 * * ?")
-    fun syncStations() {
+//    @Scheduled(cron = "0 0 0/15 * * ?")
+//    fun syncStations() {
 //        return service.syncStations()
-    }
+//    }
 
-    @Scheduled(cron = "0 0 0/15 * * ?")
-    fun syncStationsToilet() {
+//    @Scheduled(cron = "0 0 0/15 * * ?")
+//    fun syncStationsToilet() {
 //        return service.syncStationsToilet()
-    }
+//    }
 }
