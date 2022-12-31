@@ -43,14 +43,4 @@ data class Metro(
     @Comment("철도운영기관코드")
     @Column(name = "operating_agency_code", nullable = false)
     var operatingAgencyCode: String
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as Metro
-
-        return id != null && id == other.id
-    }
-
-    override fun hashCode(): Int = javaClass.hashCode()
-}
+) {}
