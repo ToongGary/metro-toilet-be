@@ -16,9 +16,7 @@ services:
       - ./docker/mysql/init:/docker-entrypoint-initdb.d
 
   metro-toilet-be:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    image: metro-toilet-be
     container_name: metro-toilet-be
     ports:
       - 8080:8080
