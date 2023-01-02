@@ -1,7 +1,8 @@
 package metrotoilet.metrotoilet.services
 
 import metrotoilet.metrotoilet.adapters.*
-import metrotoilet.metrotoilet.domains.*
+import metrotoilet.metrotoilet.adapters.dtos.StationRequestDto
+import metrotoilet.metrotoilet.adapters.dtos.StationResponseDto
 import metrotoilet.metrotoilet.repositories.*
 import org.springframework.stereotype.Service
 
@@ -11,9 +12,10 @@ class Service(
     private val metroRepository: MetroRepository,
     private val metroToiletRepository: MetroToiletRepository
 ) {
-//    fun findAllStation(line_code: String) {
-//        return metroRepository.findAll()
-//    }
+    fun findAllStation(areaCode: String, lineCode: String) : StationResponseDto? {
+        return kricHttpAdapter.requestStation(StationRequestDto(areaCode, lineCode))
+    //        return metroRepository.findAll()
+    }
 
 //    fun findOneStationToilet(station_code: String) {
 //        return metroToiletRepository.findOne()
