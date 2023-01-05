@@ -1,9 +1,11 @@
 package metrotoilet.metrotoilet.services
 
+import com.mysql.cj.x.protobuf.*
 import metrotoilet.metrotoilet.adapters.*
-import metrotoilet.metrotoilet.adapters.dtos.StationRequestDto
-import metrotoilet.metrotoilet.adapters.dtos.StationResponseDto
+import metrotoilet.metrotoilet.adapters.dtos.*
+import metrotoilet.metrotoilet.domains.*
 import metrotoilet.metrotoilet.repositories.*
+import org.hibernate.sql.Insert
 import org.springframework.stereotype.Service
 
 @Service
@@ -21,19 +23,65 @@ class Service(
 //        return metroToiletRepository.findOne()
 //    }
 
-//    fun syncStations(line_code: String?) {
-//        val stations = kricHttpAdapter.requestStation()
-//        metroRepository.updateOne(stations)
-//    }
+    fun syncStations() {
+        val stations = kricHttpAdapter.requestStation() ?: return
 
-//    fun syncStationsToilet(line_code: String?, station_code: String?) {
-//        val stations = kricHttpAdapter.requestStation()
-//
-//        if (stations != null) {
-//            for (station in stations.body) {
-//                val toilet = kricHttpAdapter.requestStationToilet(station)
-//            metroRepository.updateOne(toilet)
-//            }
-//        }
-//    }
+        val entities = mutableListOf<Metro>()
+
+        for (station in stations.body) {
+            val existsMetro = metroRepository.findTopByLineCode(station.lnCd)
+
+            entities.add(Metro(
+                id = existsMetro?.id,
+                lineCode = station.lnCd,
+                lineName = station.routNm,
+                stationCode = station.stinCd,
+                stationName = station.stinNm,
+                stationOrder = station.stinConsOrdr,
+                regionCode = station.mreaWideCd,
+                operatingAgencyCode = station.railOprIsttCd
+            ))
+        }
+
+        metroRepository.saveAll(entities)
+    }
+    fun syncStationsToilet() {
+        val stations: List<Metro> = metroRepository.findAll()
+
+        val entities = mutableListOf<MetroToilet>()
+
+        for (station in stations.slice(IntRange(0, 5))) {
+            val toilets = kricHttpAdapter.requestStationToilet(
+                StationToiletRequestDto(
+                    lnCd = station.lineCode,
+                    stinCd = station.stationCode,
+                    railOprIsttCd = station.operatingAgencyCode
+                )
+            ) ?: continue
+
+            for (toilet in toilets.body ?: continue) {
+                val existsMetroToilet = metroToiletRepository.findTopByLineCode(toilet.lnCd)
+
+                entities.add(
+                    MetroToilet(
+                        id = existsMetroToilet?.id,
+                        lineCode = toilet.lnCd,
+                        stationCode = toilet.stinCd,
+                        toiletDetailLocation = toilet.dtlLoc,
+                        toiletGateType = toilet.gateInotDvNm,
+                        toiletNearExitNumber = toilet.exitNo,
+                        toiletFloorType = toilet.grndDvNm,
+                        toiletFloor = toilet.stinFlor,
+                        toiletSexType = toilet.mlFmlDvNm,
+                        toiletCount = toilet.toltNum,
+                        toiletDiaperCount = toilet.diapExchNum,
+                        operatingAgencyCode = toilet.railOprIsttCd
+                    )
+                )
+            }
+        }
+
+        println("Finish")
+        metroToiletRepository.saveAll(entities)
+    }
 }
