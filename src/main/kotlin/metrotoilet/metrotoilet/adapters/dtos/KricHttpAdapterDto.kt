@@ -20,7 +20,7 @@ data class StationToiletRequestDto(
 
 data class StationToiletResponseDto(
     @JsonProperty("header") val header: Header,
-    @JsonProperty("body") val body: List<StationToilet>
+    @JsonProperty("body") val body: List<StationToilet>?
 )
 
 data class Header(
@@ -47,7 +47,7 @@ data class StationToilet(
     @JsonProperty("grndDvNm") val grndDvNm: String,
     @JsonProperty("stinFlor") val stinFlor: Int,
     @JsonProperty("gateInotDvNm") val gateInotDvNm: String,
-    @JsonProperty("exitNo") val exitNo: String,
+    @JsonProperty("exitNo") val exitNo: Int?,
     @JsonProperty("dtlLoc") val dtlLoc: String,
     @JsonProperty("mlFmlDvNm") val mlFmlDvNm: String,
     @JsonProperty("toltNum") val toltNum: Int?,

@@ -14,8 +14,8 @@ class KricHttpAdapter(
     private val jacksonObjectMapper: ObjectMapper,
     @Value("\${api.kric.station.endpoint}") val stationApiEndpoint: String,
     @Value("\${api.kric.station.key}") val stationApiKey: String,
-    @Value("\${api.kric.stationToilet.endpoint") val stationToiletApiEndpoint: String,
-    @Value("\${api.kric.stationToilet.key") val stationToiletApiKey: String
+    @Value("\${api.kric.stationToilet.endpoint}") val stationToiletApiEndpoint: String,
+    @Value("\${api.kric.stationToilet.key}") val stationToiletApiKey: String
 ) {
     fun requestStation(
         stationRequestDto: StationRequestDto = StationRequestDto("", "")
@@ -37,6 +37,7 @@ class KricHttpAdapter(
             stationToiletApiKey,
             stationToiletRequestDto
         )
+        println(url)
         return request<StationToiletResponseDto>(url)
     }
 
@@ -59,6 +60,7 @@ class KricHttpAdapter(
     private inline fun <reified T> request(url: String): T {
         val restTemplate = RestTemplate()
         val response = restTemplate.getForEntity(url, String::class.java)
+
         val responseBody = response.body!!
         return jacksonObjectMapper.readValue(responseBody, T::class.java)
     }
