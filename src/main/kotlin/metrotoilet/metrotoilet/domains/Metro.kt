@@ -8,20 +8,23 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.*
 import org.hibernate.annotations.Comment
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "metro")
 data class Metro(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int,
+    var id: Int? = null,
 
     @Comment("노선코드")
     @Column(name = "line_code", nullable = false)
     var lineCode: String,
 
     @Comment("노선명")
-    @Column(name = "line_name", nullable = false)
+    @Column(name = "line_name")
     var lineName: String,
 
     @Comment("역코드")
@@ -29,18 +32,29 @@ data class Metro(
     var stationCode: String,
 
     @Comment("역명")
-    @Column(name = "station_name", nullable = false)
+    @Column(name = "station_name")
     var stationName: String,
 
     @Comment("역구성순서")
-    @Column(name = "station_order", nullable = false)
+    @Column(name = "station_order")
     var stationOrder: Int,
 
     @Comment("권역코드")
-    @Column(name = "region_code", nullable = false)
+    @Column(name = "region_code")
     var regionCode: String,
 
     @Comment("철도운영기관코드")
-    @Column(name = "operating_agency_code", nullable = false)
+    @Column(name = "operating_agency_code")
     var operatingAgencyCode: String
-) {}
+) {
+    constructor(): this(
+        null,
+        "",
+        "",
+        "",
+        "",
+        0,
+        "",
+        ""
+    )
+}
