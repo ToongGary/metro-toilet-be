@@ -37,7 +37,6 @@ class KricHttpAdapter(
             stationToiletApiKey,
             stationToiletRequestDto
         )
-        println(url)
         return request<StationToiletResponseDto>(url)
     }
 
