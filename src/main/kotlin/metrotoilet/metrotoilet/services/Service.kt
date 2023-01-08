@@ -1,12 +1,12 @@
 package metrotoilet.metrotoilet.services
 
-import com.mysql.cj.x.protobuf.*
 import metrotoilet.metrotoilet.adapters.*
 import metrotoilet.metrotoilet.adapters.dtos.*
 import metrotoilet.metrotoilet.domains.*
 import metrotoilet.metrotoilet.repositories.*
-import org.hibernate.sql.Insert
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class Service(
@@ -23,13 +23,14 @@ class Service(
 //        return metroToiletRepository.findOne()
 //    }
 
+    @Transactional
     fun syncStations() {
         val stations = kricHttpAdapter.requestStation() ?: return
 
         val entities = mutableListOf<Metro>()
 
         for (station in stations.body) {
-            val existsMetro = metroRepository.findTopByLineCode(station.lnCd)
+            val existsMetro = metroRepository.findTopByStationCode(station.lnCd)
 
             entities.add(Metro(
                 id = existsMetro?.id,
@@ -45,12 +46,15 @@ class Service(
 
         metroRepository.saveAll(entities)
     }
+
+    @Transactional
     fun syncStationsToilet() {
+        val logger = LoggerFactory.getLogger(Service::class.java)
+        logger.info("Start syncStationsToilet()")
+
         val stations: List<Metro> = metroRepository.findAll()
 
-        val entities = mutableListOf<MetroToilet>()
-
-        for (station in stations.slice(IntRange(0, 5))) {
+        for (station in stations) {
             val toilets = kricHttpAdapter.requestStationToilet(
                 StationToiletRequestDto(
                     lnCd = station.lineCode,
@@ -59,12 +63,15 @@ class Service(
                 )
             ) ?: continue
 
-            for (toilet in toilets.body ?: continue) {
-                val existsMetroToilet = metroToiletRepository.findTopByLineCode(toilet.lnCd)
+            logger.info("Sync toilet (line: {} station: {})", station.lineCode, station.stationCode)
 
+            val entities = mutableListOf<MetroToilet>()
+
+            metroToiletRepository.deleteByStationCode(station.stationCode)
+
+            for (toilet in toilets.body ?: continue) {
                 entities.add(
                     MetroToilet(
-                        id = existsMetroToilet?.id,
                         lineCode = toilet.lnCd,
                         stationCode = toilet.stinCd,
                         toiletDetailLocation = toilet.dtlLoc,
@@ -79,9 +86,10 @@ class Service(
                     )
                 )
             }
+
+            metroToiletRepository.saveAll(entities)
         }
 
-        println("Finish")
-        metroToiletRepository.saveAll(entities)
+        logger.info("Finish syncStationsToilet()")
     }
 }
