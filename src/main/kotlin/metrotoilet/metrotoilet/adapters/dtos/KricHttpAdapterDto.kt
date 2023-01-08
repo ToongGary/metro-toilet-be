@@ -41,15 +41,15 @@ data class Station(
 )
 
 data class StationToilet(
-    @JsonProperty("railOprIsttCd") val railOprIsttCd: String,
+    @JsonProperty("railOprIsttCd") val railOprIsttCd: String?,
     @JsonProperty("lnCd") val lnCd: String,
     @JsonProperty("stinCd") val stinCd: String,
-    @JsonProperty("grndDvNm") val grndDvNm: String,
-    @JsonProperty("stinFlor") val stinFlor: Int,
-    @JsonProperty("gateInotDvNm") val gateInotDvNm: String,
-    @JsonProperty("exitNo") val exitNo: Int?,
-    @JsonProperty("dtlLoc") val dtlLoc: String,
-    @JsonProperty("mlFmlDvNm") val mlFmlDvNm: String,
+    @JsonProperty("grndDvNm") val grndDvNm: String?,
+    @JsonProperty("stinFlor") val stinFlor: Int?,
+    @JsonProperty("gateInotDvNm") val gateInotDvNm: String?,
+    @JsonProperty("exitNo") val exitNo: String?,
+    @JsonProperty("dtlLoc") val dtlLoc: String?,
+    @JsonProperty("mlFmlDvNm") val mlFmlDvNm: String?,
     @JsonProperty("toltNum") val toltNum: Int?,
     @JsonProperty("diapExchNum") val diapExchNum: Int?
 )

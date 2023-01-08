@@ -27,27 +27,27 @@ data class MetroToilet(
 
     @Comment("상세위치")
     @Column(name = "toilet_detail_location")
-    var toiletDetailLocation: String,
+    var toiletDetailLocation: String?,
 
     @Comment("게이트내외구분")
     @Column(name = "toilet_gate_type")
-    var toiletGateType: String,
+    var toiletGateType: String?,
 
     @Comment("출구번호")
     @Column(name = "toilet_near_exit_number")
-    var toiletNearExitNumber: Int?,
+    var toiletNearExitNumber: String?,
 
     @Comment("지상구분")
     @Column(name = "toilet_floor_type")
-    var toiletFloorType: String,
+    var toiletFloorType: String?,
 
     @Comment("역층")
     @Column(name = "toilet_floor")
-    var toiletFloor: Int,
+    var toiletFloor: Int?,
 
     @Comment("남녀구분")
     @Column(name = "toilet_sex_type")
-    var toiletSexType: String,
+    var toiletSexType: String?,
 
     @Comment("화장실개수")
     @Column(name = "toilet_count")
@@ -59,7 +59,7 @@ data class MetroToilet(
 
     @Comment("철도운영기관코드")
     @Column(name = "operating_agency_code")
-    var operatingAgencyCode: String
+    var operatingAgencyCode: String?
 ) {
     constructor(): this(
         null,
@@ -67,7 +67,7 @@ data class MetroToilet(
         "",
         "",
         "",
-        0,
+        "",
         "",
         0,
         "",
