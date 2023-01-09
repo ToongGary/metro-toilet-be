@@ -17,13 +17,9 @@ data class MetroToilet(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
 
-    @Comment("노선코드")
-    @Column(name = "line_code", nullable = false)
-    var lineCode: String,
-
-    @Comment("역코드")
-    @Column(name = "station_code", nullable = false)
-    var stationCode: String,
+    @Comment("metro 테이블 id")
+    @Column(name = "metro_id", nullable = false)
+    var metroId: Int,
 
     @Comment("상세위치")
     @Column(name = "toilet_detail_location")
@@ -63,8 +59,7 @@ data class MetroToilet(
 ) {
     constructor(): this(
         null,
-        "",
-        "",
+        0,
         "",
         "",
         "",

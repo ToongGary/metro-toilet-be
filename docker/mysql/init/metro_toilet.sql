@@ -1,7 +1,6 @@
 CREATE TABLE IF NOT EXISTS metro_toilet (
     id INT AUTO_INCREMENT NOT NULL,
-    line_code VARCHAR(10) NOT NULL COMMENT '노선코드',
-    station_code VARCHAR(10) NOT NULL COMMENT '역코드',
+    metro_id INT NOT NULL,
     toilet_detail_location VARCHAR(255) COMMENT '상세위치',
     toilet_gate_type VARCHAR(255) COMMENT '게이트내외구분',
     toilet_near_exit_number VARCHAR(255) COMMENT '출구번호',

@@ -74,13 +74,12 @@ class Service(
 
             val entities = mutableListOf<MetroToilet>()
 
-            metroToiletRepository.deleteByStationCode(station.stationCode)
+            metroToiletRepository.deleteByMetroId(station.id as Int)
 
             for (toilet in toilets.body ?: continue) {
                 entities.add(
                     MetroToilet(
-                        lineCode = toilet.lnCd,
-                        stationCode = toilet.stinCd,
+                        metroId = station.id as Int,
                         toiletDetailLocation = toilet.dtlLoc,
                         toiletGateType = toilet.gateInotDvNm,
                         toiletNearExitNumber = toilet.exitNo,
