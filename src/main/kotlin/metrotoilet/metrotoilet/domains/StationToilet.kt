@@ -17,9 +17,9 @@ data class StationToilet(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
 
-    @Comment("metro 테이블 id")
-    @Column(name = "metro_id", nullable = false)
-    var metroId: Int,
+    @Comment("station 테이블 id")
+    @Column(name = "station_id", nullable = false)
+    var stationId: Int,
 
     @Comment("상세위치")
     @Column(name = "toilet_detail_location")

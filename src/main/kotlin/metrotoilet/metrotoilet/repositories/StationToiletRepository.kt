@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface StationToiletRepository: JpaRepository<StationToilet, Int> {
-    fun deleteByMetroId(metroId: Int) {
-        return deleteByMetroId(metroId)
+    fun deleteByStationId(stationId: Int) {
+        return deleteByStationId(stationId)
     }
 }

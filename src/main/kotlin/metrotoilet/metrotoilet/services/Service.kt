@@ -15,7 +15,7 @@ class Service(
     private val stationRepository: StationRepository,
     private val stationToiletRepository: StationToiletRepository
 ) {
-    fun findAllStation(areaCode: String, lineCode: String) : List<Station>? {
+    fun findAllStation(areaCode: String?, lineCode: String?) : List<Station>? {
         return stationRepository.findAll()
     }
 
@@ -33,13 +33,13 @@ class Service(
         val entities = mutableListOf<Station>()
 
         for (station in stations.body) {
-            val existsMetro: Station? = stationRepository.findTopByLineCodeAndStationCode(station.lnCd, station.stinCd)
+            val existsStation: Station? = stationRepository.findTopByLineCodeAndStationCode(station.lnCd, station.stinCd)
 
             logger.info("Sync station (line: {} station: {})", station.lnCd, station.stinCd)
 
             entities.add(
                 Station(
-                id = existsMetro?.id,
+                id = existsStation?.id,
                 lineCode = station.lnCd,
                 lineName = station.routNm,
                 stationCode = station.stinCd,
@@ -76,12 +76,12 @@ class Service(
 
             val entities = mutableListOf<StationToilet>()
 
-            stationToiletRepository.deleteByMetroId(station.id as Int)
+            stationToiletRepository.deleteByStationId(station.id as Int)
 
             for (toilet in toilets.body ?: continue) {
                 entities.add(
                     StationToilet(
-                        metroId = station.id as Int,
+                        stationId = station.id as Int,
                         toiletDetailLocation = toilet.dtlLoc,
                         toiletGateType = toilet.gateInotDvNm,
                         toiletNearExitNumber = toilet.exitNo,
