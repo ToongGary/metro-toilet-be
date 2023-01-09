@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface MetroRepository: JpaRepository<Metro, Int> {
-    fun findTopByStationCode(stationCode: String): Metro? {
-        return findTopByStationCode(stationCode)
+    fun findTopByLineCodeAndStationCode(lineCode: String, stationCode: String): Metro? {
+        return findTopByLineCodeAndStationCode(lineCode, stationCode)
     }
 }
