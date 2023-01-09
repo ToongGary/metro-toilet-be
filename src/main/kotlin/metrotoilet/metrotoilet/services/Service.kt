@@ -5,6 +5,7 @@ import metrotoilet.metrotoilet.adapters.dtos.*
 import metrotoilet.metrotoilet.domains.Station
 import metrotoilet.metrotoilet.domains.StationToilet
 import metrotoilet.metrotoilet.repositories.*
+import metrotoilet.metrotoilet.repositories.dtos.*
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,13 +16,13 @@ class Service(
     private val stationRepository: StationRepository,
     private val stationToiletRepository: StationToiletRepository
 ) {
-    fun findAllStation(areaCode: String?, lineCode: String?) : List<Station>? {
-        return stationRepository.findAll()
+    fun findAllStation(regionCode: String?, lineCode: String?) : List<findAllResponseDto>? {
+        return stationRepository.findAll(regionCode, lineCode)
     }
 
-//    fun findOneStationToilet(station_code: String) {
-//        return metroToiletRepository.findOne()
-//    }
+    fun findAllStationToilet(stationId: Int?): List<StationToilet> {
+        return stationToiletRepository.findAllByStationId(stationId)
+    }
 
     @Transactional
     fun syncStations() {
@@ -39,15 +40,15 @@ class Service(
 
             entities.add(
                 Station(
-                id = existsStation?.id,
-                lineCode = station.lnCd,
-                lineName = station.routNm,
-                stationCode = station.stinCd,
-                stationName = station.stinNm,
-                stationOrder = station.stinConsOrdr,
-                regionCode = station.mreaWideCd,
-                operatingAgencyCode = station.railOprIsttCd
-            )
+                    id = existsStation?.id,
+                    lineCode = station.lnCd,
+                    lineName = station.routNm,
+                    stationCode = station.stinCd,
+                    stationName = station.stinNm,
+                    stationOrder = station.stinConsOrdr,
+                    regionCode = station.mreaWideCd,
+                    operatingAgencyCode = station.railOprIsttCd
+                )
             )
         }
 
@@ -72,7 +73,7 @@ class Service(
                 )
             ) ?: continue
 
-            logger.info("Sync toilet (metroId: {}, line: {}, station: {})", station.id, station.lineCode, station.stationCode)
+            logger.info("Sync toilet (stationId: {}, line: {}, station: {})", station.id, station.lineCode, station.stationCode)
 
             val entities = mutableListOf<StationToilet>()
 

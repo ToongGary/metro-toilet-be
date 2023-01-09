@@ -5,6 +5,10 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface StationToiletRepository: JpaRepository<StationToilet, Int> {
+    fun findAllByStationId(stationId: Int?): List<StationToilet> {
+        return findAllByStationId(stationId)
+    }
+
     fun deleteByStationId(stationId: Int) {
         return deleteByStationId(stationId)
     }
