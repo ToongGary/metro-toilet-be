@@ -25,12 +25,17 @@ class Service(
 
     @Transactional
     fun syncStations() {
+        val logger = LoggerFactory.getLogger(Service::class.java)
+        logger.info("Start syncStation()")
+
         val stations = kricHttpAdapter.requestStation() ?: return
 
         val entities = mutableListOf<Metro>()
 
         for (station in stations.body) {
-            val existsMetro = metroRepository.findTopByStationCode(station.lnCd)
+            val existsMetro: Metro? = metroRepository.findTopByLineCodeAndStationCode(station.lnCd, station.stinCd)
+
+            logger.info("Sync station (line: {} station: {})", station.lnCd, station.stinCd)
 
             entities.add(Metro(
                 id = existsMetro?.id,
@@ -45,6 +50,8 @@ class Service(
         }
 
         metroRepository.saveAll(entities)
+
+        logger.info("Finish syncStation()")
     }
 
     @Transactional
@@ -63,7 +70,7 @@ class Service(
                 )
             ) ?: continue
 
-            logger.info("Sync toilet (line: {} station: {})", station.lineCode, station.stationCode)
+            logger.info("Sync toilet (metroId: {}, line: {}, station: {})", station.id, station.lineCode, station.stationCode)
 
             val entities = mutableListOf<MetroToilet>()
 
