@@ -59,27 +59,27 @@ class Service(
         val logger = LoggerFactory.getLogger(Service::class.java)
         logger.info("Start syncStationsToilet()")
 
-        val stations: List<Metro> = metroRepository.findAll()
+        val metros: List<Metro> = metroRepository.findAll()
 
-        for (station in stations) {
+        for (metro in metros) {
             val toilets = kricHttpAdapter.requestStationToilet(
                 StationToiletRequestDto(
-                    lnCd = station.lineCode,
-                    stinCd = station.stationCode,
-                    railOprIsttCd = station.operatingAgencyCode
+                    lnCd = metro.lineCode,
+                    stinCd = metro.stationCode,
+                    railOprIsttCd = metro.operatingAgencyCode
                 )
             ) ?: continue
 
-            logger.info("Sync toilet (metroId: {}, line: {}, station: {})", station.id, station.lineCode, station.stationCode)
+            logger.info("Sync toilet (metroId: {}, line: {}, station: {})", metro.id, metro.lineCode, metro.stationCode)
 
             val entities = mutableListOf<MetroToilet>()
 
-            metroToiletRepository.deleteByMetroId(station.id as Int)
+            metroToiletRepository.deleteByMetroId(metro.id as Int)
 
             for (toilet in toilets.body ?: continue) {
                 entities.add(
                     MetroToilet(
-                        metroId = station.id as Int,
+                        metroId = metro.id as Int,
                         toiletDetailLocation = toilet.dtlLoc,
                         toiletGateType = toilet.gateInotDvNm,
                         toiletNearExitNumber = toilet.exitNo,
