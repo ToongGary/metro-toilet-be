@@ -11,8 +11,8 @@ import org.hibernate.annotations.*
 import java.time.*
 
 @Entity
-@Table(name = "metro_toilet")
-data class MetroToilet(
+@Table(name = "station_toilet")
+data class StationToilet(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,

@@ -1,5 +1,4 @@
 package metrotoilet.metrotoilet.domains
-
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -8,13 +7,10 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.*
 import org.hibernate.annotations.Comment
-import org.hibernate.annotations.CreationTimestamp
-import org.hibernate.annotations.UpdateTimestamp
-import java.time.LocalDateTime
 
 @Entity
-@Table(name = "metro")
-data class Metro(
+@Table(name = "station")
+data class Station(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,

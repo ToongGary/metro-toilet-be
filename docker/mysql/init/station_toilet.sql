@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS metro_toilet (
+CREATE TABLE IF NOT EXISTS station_toilet (
     id INT AUTO_INCREMENT NOT NULL,
     metro_id INT NOT NULL,
     toilet_detail_location VARCHAR(255) COMMENT '상세위치',

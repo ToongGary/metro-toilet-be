@@ -1,9 +1,8 @@
 package metrotoilet.metrotoilet.controllers
 
-import metrotoilet.metrotoilet.adapters.dtos.StationResponseDto
+import metrotoilet.metrotoilet.domains.*
 import metrotoilet.metrotoilet.services.*
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/metro")
 class HttpController(private val service: Service) {
     @GetMapping("/station")
-    fun getStations() : StationResponseDto? {
+    fun getStations() : List<Station>? {
         return service.findAllStation("01","1")
     }
 

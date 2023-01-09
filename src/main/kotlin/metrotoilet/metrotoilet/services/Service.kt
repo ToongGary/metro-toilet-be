@@ -2,7 +2,8 @@ package metrotoilet.metrotoilet.services
 
 import metrotoilet.metrotoilet.adapters.*
 import metrotoilet.metrotoilet.adapters.dtos.*
-import metrotoilet.metrotoilet.domains.*
+import metrotoilet.metrotoilet.domains.Station
+import metrotoilet.metrotoilet.domains.StationToilet
 import metrotoilet.metrotoilet.repositories.*
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -11,12 +12,11 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class Service(
     private val kricHttpAdapter: KricHttpAdapter,
-    private val metroRepository: MetroRepository,
-    private val metroToiletRepository: MetroToiletRepository
+    private val stationRepository: StationRepository,
+    private val stationToiletRepository: StationToiletRepository
 ) {
-    fun findAllStation(areaCode: String, lineCode: String) : StationResponseDto? {
-        return kricHttpAdapter.requestStation(StationRequestDto(areaCode, lineCode))
-    //        return metroRepository.findAll()
+    fun findAllStation(areaCode: String, lineCode: String) : List<Station>? {
+        return stationRepository.findAll()
     }
 
 //    fun findOneStationToilet(station_code: String) {
@@ -30,14 +30,15 @@ class Service(
 
         val stations = kricHttpAdapter.requestStation() ?: return
 
-        val entities = mutableListOf<Metro>()
+        val entities = mutableListOf<Station>()
 
         for (station in stations.body) {
-            val existsMetro: Metro? = metroRepository.findTopByLineCodeAndStationCode(station.lnCd, station.stinCd)
+            val existsMetro: Station? = stationRepository.findTopByLineCodeAndStationCode(station.lnCd, station.stinCd)
 
             logger.info("Sync station (line: {} station: {})", station.lnCd, station.stinCd)
 
-            entities.add(Metro(
+            entities.add(
+                Station(
                 id = existsMetro?.id,
                 lineCode = station.lnCd,
                 lineName = station.routNm,
@@ -46,10 +47,11 @@ class Service(
                 stationOrder = station.stinConsOrdr,
                 regionCode = station.mreaWideCd,
                 operatingAgencyCode = station.railOprIsttCd
-            ))
+            )
+            )
         }
 
-        metroRepository.saveAll(entities)
+        stationRepository.saveAll(entities)
 
         logger.info("Finish syncStation()")
     }
@@ -59,27 +61,27 @@ class Service(
         val logger = LoggerFactory.getLogger(Service::class.java)
         logger.info("Start syncStationsToilet()")
 
-        val metros: List<Metro> = metroRepository.findAll()
+        val stations: List<Station> = stationRepository.findAll()
 
-        for (metro in metros) {
+        for (station in stations) {
             val toilets = kricHttpAdapter.requestStationToilet(
                 StationToiletRequestDto(
-                    lnCd = metro.lineCode,
-                    stinCd = metro.stationCode,
-                    railOprIsttCd = metro.operatingAgencyCode
+                    lnCd = station.lineCode,
+                    stinCd = station.stationCode,
+                    railOprIsttCd = station.operatingAgencyCode
                 )
             ) ?: continue
 
-            logger.info("Sync toilet (metroId: {}, line: {}, station: {})", metro.id, metro.lineCode, metro.stationCode)
+            logger.info("Sync toilet (metroId: {}, line: {}, station: {})", station.id, station.lineCode, station.stationCode)
 
-            val entities = mutableListOf<MetroToilet>()
+            val entities = mutableListOf<StationToilet>()
 
-            metroToiletRepository.deleteByMetroId(metro.id as Int)
+            stationToiletRepository.deleteByMetroId(station.id as Int)
 
             for (toilet in toilets.body ?: continue) {
                 entities.add(
-                    MetroToilet(
-                        metroId = metro.id as Int,
+                    StationToilet(
+                        metroId = station.id as Int,
                         toiletDetailLocation = toilet.dtlLoc,
                         toiletGateType = toilet.gateInotDvNm,
                         toiletNearExitNumber = toilet.exitNo,
@@ -93,7 +95,7 @@ class Service(
                 )
             }
 
-            metroToiletRepository.saveAll(entities)
+            stationToiletRepository.saveAll(entities)
         }
 
         logger.info("Finish syncStationsToilet()")
