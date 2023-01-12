@@ -9,5 +9,6 @@ data class findAllResponseDto(
     var stationOrder: Int?,
     var regionCode: String?,
     var operatingAgencyCode: String?,
-    val toiletCount: Long?
+    val toiletCount: Long?,
+    val toiletInGateCount: Long?
 )

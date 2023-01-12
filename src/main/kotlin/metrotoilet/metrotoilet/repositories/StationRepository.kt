@@ -18,6 +18,7 @@ interface StationRepository: JpaRepository<Station, Int> {
         "     , s.regionCode" +
         "     , s.operatingAgencyCode" +
         "     , (SELECT COUNT(1) FROM StationToilet st WHERE st.stationId = s.id) toiletCount" +
+        "     , (SELECT COUNT(1) FROM StationToilet st WHERE st.stationId = s.id and st.toiletGateType = '내') toiletInGateCount" +
         "     )" +
         "  FROM Station s" +
         " WHERE s.regionCode = COALESCE(:regionCode, s.regionCode)" +
