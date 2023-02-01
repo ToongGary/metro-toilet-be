@@ -17,7 +17,7 @@ class HttpController(private val service: Service) {
         @RequestParam regionCode: String?,
         @RequestParam lineCode: String?
     ) : List<findAllResponseDto>? {
-        return service.findAllStation(regionCode, lineCode)
+        return service.findAllStation(regionCode, lineCode);
     }
 
     @GetMapping("/station/toilet/{stationId}")
